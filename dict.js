@@ -1,56 +1,187 @@
 var request = require("request");
-var config = require("./config/config.json")
+var config = require("./config/config.json");
 var baseUrl = config.baseUrl;
+var Promise=require("promise");
 var logger = require('tracer').console({
     format: "{{timestamp}} [{{title}}] {{message}} (in {{path}}:{{line}})",
     dateformat: "dd-mm-yyyy HH:MM:ss TT"
 });
+var def_arr=[];
 var stdin = process.openStdin();
 
-function definitionHandler(word) {
-    //httpreq,
-    //print design
+
+
+function definitionHandler(searchWord) {
+    logger.log("\n\ndefinitions for ::", searchWord);
+    var count = 0
+    var url = baseUrl + searchWord;
+    httpreqHandler(url, function (body) {
+        body.results.forEach(function (item) {
+            item.lexicalEntries.forEach(function (item) {
+                item.entries.forEach(function (item) {
+                    item.senses.forEach(function (item) {
+                        if (item.definitions) {
+                            item.definitions.forEach(function (item) {
+
+                                console.log("\t\t", count = count + 1, ".", item);
+                                def_arr.push(item);
+
+                            })
+                        }
+                    })
+                })
+            })
+
+        })
+    })
 }
 
-function exampleHandler(word) {
-    //httpreq,
-    //print design
+function exampleHandler(searchWord) {
+    logger.log("\n\nExamples for ::", searchWord);
+    var count = 0
+    var url = baseUrl + searchWord;
+    httpreqHandler(url, function (body) {
+        console.log("httpRequest");
+        body.results.forEach(function (item) {
+            item.lexicalEntries.forEach(function (item) {
+                item.entries.forEach(function (item) {
+                    item.senses.forEach(function (item) {
+                        if (item.examples) {
+
+
+                            item.examples.forEach(function (item) {
+
+                                console.log("\t\t", count = count + 1, "..", item.text);
+
+                            })
+                        }
+                    })
+                })
+            })
+
+        })
+    })
 }
 
 
-function synonymHandler(word) {
-    //httpreq,
-    //print design
+function synonymHandler(searchWord) {
+    console.log("no synonyms available");
 }
 
-function antonymHandler(word) {
-    //httpreq,
-    //print design
+function antonymHandler(searchWord) {
+    console.log("no antonyms available");
 }
 
-function fulldictHandler(word) {
-
+function alldetailsHandler(searchWord) {
+    definitionHandler(searchWord);
+    exampleHandler(searchWord);
+    synonymHandler(searchWord);
+    antonymHandler(searchWord);
 }
 
-function wordoftheDayHandler(word) {
-
+function wordoftheDayHandler() {
+    var rand = config.odd_words[Math.floor(Math.random() * config.odd_words.length)];
+    alldetailsHandler(rand);
 }
 
-function playHandler(word) {
-
+function playHandler() {
+    var rand = config.odd_words[Math.floor(Math.random() * config.odd_words.length)];
+    var def_rand;
 }
 
 
 function httpreqHandler(url, callback) {
     console.log("http request");
+    request(
+        {
+            method: 'GET',
+            url: url,
+            headers: {
+                "content-type": "application/json",
+                "app_id": config.app_id,
+                "app_key": config.api_key
+            },
+            json: true,
+        }, function (error, response, body) {
+            if (error) {
+                return logger.log("error:", error);
+            }
+            logger.log("body in http", body);
+            callback(body);
+        });
 }
 
 
-function init() {
-    //validations and function calling
+function init(commandType, searchWord) {
+    logger.log("commandType", commandType);
+    logger.log("searchWord", searchWord);
+    if (!commandType && !searchWord) {
+        logger.log("word of the day");
+        wordoftheDayHandler();
+    }
+    else if (commandType == 'def') {
+        console.log("definition")
+        if (!searchWord) {
+            console.log("Please enter a word to search")
+            process.exit();
+        }
+        definitionHandler(searchWord)
+    }
+    else if (commandType == 'syn') {
+        logger.log("synonyms")
+        if (!searchWord) {
+            console.log("Please enter a word to search")
+            process.exit();
+        }
+        synonymHandler(searchWord)
+    }
+    else if (commandType == 'ant') {
+        logger.log("antonyms");
+        if (!searchWord) {
+            console.log("Please enter a word to search")
+        }
+        antonymHandler(searchWord);
+    }
+    else if (commandType == 'ex') {
+        if (!searchWord) {
+            console.log("Please enter a word to search")
+            process.exit();
+        }
+        //  logger.log("example");
+        exampleHandler(searchWord);
+    }
+    else if (commandType == "play") {
+        playHandler()
+    }
+    else if (commandType == "dict" || (commandType && !searchWord)) {
+        logger.log("all details");
 
+        if (commandType == "dict" && !searchWord) {
+            console.log("please enter a word")
+        }
+        else if (searchWord) {
+            alldetailsHandler(searchWord);
+        }
+        else {
+            alldetailsHandler(commandType);
+        }
+
+    }
+    else {
+        logger.log("invalid input");
+    }
 }
-var commandType = process.argv[2];
-var searchWord = process.argv[3];
+function exit() {
+    process.exit();
+}
 
-init()
+
+if (process.argv.length > 4) {
+    return console.log("invalid number of parameters");
+}
+if (typeof process.argv[2] != "string" || (process.argv[3]&&typeof process.argv[3] != "string")) {
+    console.log("hai")
+    return console.log("invalid arguments type enter arguments as strings")
+}
+console.log("dude");
+init(process.argv[2], process.argv[3]);
