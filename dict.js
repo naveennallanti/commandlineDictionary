@@ -101,8 +101,7 @@ function playHandler() {
 
         function playAgain() {
             stdin.addListener("data", function (guessed_word) {
-                console.log(d.toString().trim());
-                process.stdin.destroy();
+               // process.stdin.destroy();
                 if (guessed_word == rand) {
                     console.log("Correct answer");
                 } else {
@@ -162,7 +161,7 @@ function playHandler() {
                 }
             });
         }
-
+        playAgain();
     })
 }
 
