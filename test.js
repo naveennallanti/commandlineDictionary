@@ -46,12 +46,15 @@
         //         playHandler(searchWord);
         //     }
         // });
-        var pick_def_rand="naveen"
-        var str="";
-        var jumbled;
-       for(var i=0;i<pick_def_rand.length;i++){
-            jumbled = pick_def_rand[Math.floor(Math.random() * pick_def_rand.length)]
-            str=str.concat(jumbled);
-        }
-        console.log(str);
+
+
+
+       //  var pick_def_rand="naveen"
+       //  var str="";
+       //  var jumbled;
+       // for(var i=0;i<pick_def_rand.length;i++){
+       //      jumbled = pick_def_rand[Math.floor(Math.random() * pick_def_rand.length)]
+       //      str=str.concat(jumbled);
+       //  }
+       //  console.log(str);
         
