@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "async-await": "^0.1.40",
+    "promise": "^8.0.2",
     "request": "^2.88.0",
     "tracer": "^0.9.8"
   }
