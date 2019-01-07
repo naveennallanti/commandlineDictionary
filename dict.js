@@ -108,6 +108,7 @@ function playHandler() {
                     console.log("1.for Try again\n2.for Hint\n3.for Quit")
                     console.log("Enter choice");
                     stdin.addListener("data", function (choose) {
+                        choose=parseInt(choose)
                         switch (choose) {
                             case 1:
                                 {
@@ -118,6 +119,7 @@ function playHandler() {
                                 {
                                     console.log("1.jumbled word\n2.foranother definition")
                                     stdin.addListener("data", function (choose) {
+                                        choose=parseInt(choose);
                                         switch (choose) {
                                             case 1:
                                                 {
@@ -167,7 +169,6 @@ function playHandler() {
 
 
 function httpreqHandler(url, callback) {
-    console.log("http request");
     request({
         method: 'GET',
         url: url,
@@ -188,8 +189,6 @@ function httpreqHandler(url, callback) {
 
 
 function init(commandType, searchWord) {
-    logger.log("commandType", commandType);
-    logger.log("searchWord", searchWord);
     if (!commandType && !searchWord) {
         logger.log("word of the day");
         wordoftheDayHandler();
