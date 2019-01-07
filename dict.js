@@ -131,16 +131,18 @@ function wordoftheDayHandler() {
 function playHandler() {
     var rand = config.odd_words[Math.floor(Math.random() * config.odd_words.length)];
     var pick_def_rand;
-    console.log("rand word is",rand);
+    // console.log("rand word is",rand);
+    rand=rand.toString();
     definitionHandler(rand, true, function (def_arr) {
         pick_def_rand = def_arr[Math.floor(Math.random() * def_arr.length)]
         console.log("Guess the word for definition::\n", pick_def_rand);
-
         function playAgain() {
             console.log("Enter the word::\n")
             stdin.addListener("data", function (guessed_word) {
+                guessed_word=guessed_word.toString().trim();
                 if (guessed_word == rand) {
-                    console.log("Correct answer");
+                    console.log("***Contratulations Correct answer***");
+                    process.exit();
                 } else {
                     // console.log("wrong answer")
                     console.log('Wrong Answer!!');
