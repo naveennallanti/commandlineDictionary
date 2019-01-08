@@ -57,4 +57,32 @@
        //      str=str.concat(jumbled);
        //  }
        //  console.log(str);
+
+
+
+
+// function options2(check){
+//     check = check.toString().trim();
+//     check = parseInt(check);
+//
+//         if(check==1) {
+//             var str = "";
+//             var selected_element;
+//             for (var i = 0; i < rand.length; i++) {
+//                 selected_element = rand[Math.floor(Math.random() * rand.length)]
+//                 str = str.concat(selected_element);
+//             }
+//             console.log("Here is your jumbled word", str);
+//             IO(play);
+//         }
+//         else if(check==2){
+//             pick_def_rand = def_arr[Math.floor(Math.random() * def_arr.length)]
+//             console.log("Here is Another Hint::\n", pick_def_rand);
+//             IO(play);
+//         }
+//         else{
+//             console.log("invalid selection");
+//             process.exit();
+//         }
+// }
         
