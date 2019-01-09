@@ -36,7 +36,7 @@ function definitionHandler(searchWord, play, callback) {
                 })
             }
             else {
-                console.log("definitions not available");
+                console.log("definitions not available for this word");
             }
             if (play) {
                 callback(def_arr);
@@ -71,7 +71,7 @@ function exampleHandler(searchWord, callback) {
             })
         }
         else {
-            console.log("Examples not availble")
+            console.log("Examples not availble for this word")
         }
         callback();
     })
@@ -101,7 +101,7 @@ function synonymHandler(searchWord, callback) {
             })
         }
         else {
-            console.log("Synonyms not availble")
+            console.log("Synonyms not availble for this word")
         }
         callback();
     })
@@ -130,13 +130,14 @@ function antonymHandler(searchWord, callback) {
             })
         }
         else {
-            console.log("antonyms not availble")
+            console.log("antonyms not availble for this word")
         }
         callback();
     })
 }
 
 function alldetailsHandler(searchWord, callback) {
+
     definitionHandler(searchWord, null, function () {
         exampleHandler(searchWord, function () {
             synonymHandler(searchWord, function () {
@@ -148,9 +149,10 @@ function alldetailsHandler(searchWord, callback) {
     });
 }
 
-function wordoftheDayHandler() {
+function wordoftheDayHandler(callback) {
     var rand = config.odd_words[Math.floor(Math.random() * config.odd_words.length)];
     alldetailsHandler(rand, function () {
+        callback();
         process.exit();
     });
 }
@@ -223,7 +225,7 @@ function httpreqHandler(url, callback) {
 function init(commandType, searchWord) {
     if (!commandType && !searchWord) {
         console.log("word of the day");
-        wordoftheDayHandler(null, function () {
+        wordoftheDayHandler(function () {
             console.log("***********done***********");
             process.exit()
         });
